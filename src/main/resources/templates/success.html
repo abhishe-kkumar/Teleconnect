@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Recharge successful')}"></head>
+<body>
+<header th:replace="~{fragments :: header('recharge')}"></header>
+
+<main class="wrap section narrow">
+    <div class="alert success">Recharge successful (simulated). No real money was charged.</div>
+    <h1>Transaction receipt</h1>
+    <dl class="receipt">
+        <div><dt>Transaction ID</dt><dd th:text="${transaction.transactionId}">TC0001</dd></div>
+        <div><dt>Mobile number</dt><dd th:text="${transaction.mobileNumber}">9876543210</dd></div>
+        <div><dt>Plan</dt><dd th:text="${transaction.planName + ' (' + transaction.planType + ')'}">Plan</dd></div>
+        <div><dt>Amount</dt><dd th:text="${transaction.amountLabel}">₹199</dd></div>
+        <div><dt>Date and time</dt><dd th:text="${transaction.formattedTime}">Now</dd></div>
+        <div><dt>Status</dt><dd th:text="${transaction.status}">SUCCESS</dd></div>
+    </dl>
+    <div class="hero-actions">
+        <a class="btn" th:href="@{/history(mobile=${transaction.mobileNumber})}">View history</a>
+        <a class="btn btn-ghost-dark" th:href="@{/recharge}">Recharge another</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

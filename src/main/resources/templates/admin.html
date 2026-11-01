@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Admin')}"></head>
+<body>
+<header th:replace="~{fragments :: header('admin')}"></header>
+
+<main class="wrap section">
+    <h1>Manage plans</h1>
+    <p class="muted">Simple admin page with no login. Inactive plans are hidden from customers.</p>
+
+    <div class="alert success" th:if="${success}" th:text="${success}">Done</div>
+    <div class="alert error" th:if="${error}" th:text="${error}" role="alert">Error</div>
+
+    <h2>Add a plan</h2>
+    <form class="form grid-form" th:action="@{/admin/plans}" method="post">
+        <div>
+            <label for="planType">Type</label>
+            <select id="planType" name="planType">
+                <option value="Prepaid">Prepaid</option>
+                <option value="Postpaid">Postpaid</option>
+            </select>
+        </div>
+        <div><label for="name">Plan name</label><input id="name" name="name" maxlength="40" required></div>
+        <div><label for="price">Price (₹)</label><input id="price" name="price" type="number" min="1" required></div>
+        <div id="validity-field"><label for="validityDays">Validity (days, prepaid only)</label>
+            <input id="validityDays" name="validityDays" type="number" min="1" max="365" value="28"></div>
+        <div><label for="dataAllowance">Data</label><input id="dataAllowance" name="dataAllowance" placeholder="2 GB/day" required></div>
+        <div><label for="calling">Calling</label><input id="calling" name="calling" placeholder="Unlimited" required></div>
+        <div><label for="sms">SMS</label><input id="sms" name="sms" placeholder="100/day" required></div>
+        <div><label for="extras">Extra benefits (optional)</label><input id="extras" name="extras"></div>
+        <div><label for="addOnSims">Add-on SIMs (postpaid only)</label>
+            <input id="addOnSims" name="addOnSims" type="number" min="0" max="5" value="0"></div>
+        <div class="full"><button class="btn btn-accent" type="submit">Add plan</button></div>
+    </form>
+
+    <h2>All plans</h2>
+    <div class="table-scroll">
+        <table class="data">
+            <thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Price</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="p : ${plans}">
+                <td th:text="${p.planId}">P101</td>
+                <td th:text="${p.name}">Plan</td>
+                <td th:text="${p.planType}">Prepaid</td>
+                <td th:text="${p.priceLabel}">₹199</td>
+                <td><span class="status" th:classappend="${!p.active} ? 'off'" th:text="${p.active ? 'Active' : 'Inactive'}">Active</span></td>
+                <td>
+                    <form th:action="@{/admin/plans/{id}/toggle(id=${p.planId})}" method="post">
+                        <button class="btn btn-small" type="submit" th:text="${p.active ? 'Deactivate' : 'Activate'}">Deactivate</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

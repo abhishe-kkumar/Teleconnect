@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Plans')}"></head>
+<body>
+<header th:replace="~{fragments :: header('plans')}"></header>
+
+<main class="wrap section">
+    <h1>Recharge plans</h1>
+    <p class="muted">Tick two or three plans and press Compare to see them side by side.</p>
+
+    <form id="compare-form" class="compare-bar" th:action="@{/plans/compare}" method="get">
+        <span id="compare-hint">Select at least 2 plans</span>
+        <button id="compare-btn" class="btn" type="submit" disabled>Compare selected</button>
+    </form>
+
+    <div class="cards">
+        <th:block th:each="plan : ${plans}">
+            <article th:replace="~{fragments :: planCard(${plan}, true)}"></article>
+        </th:block>
+    </div>
+    <p class="empty" th:if="${#lists.isEmpty(plans)}">No plans are available right now.</p>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

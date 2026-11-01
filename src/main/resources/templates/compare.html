@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Compare plans')}"></head>
+<body>
+<header th:replace="~{fragments :: header('plans')}"></header>
+
+<main class="wrap section">
+    <h1>Compare plans</h1>
+
+    <div class="alert error" th:if="${error}" th:text="${error}">Error</div>
+
+    <div class="table-scroll" th:if="${#lists.size(plans) >= 2}">
+        <table class="data compare">
+            <thead>
+            <tr>
+                <th></th>
+                <th th:each="p : ${plans}" th:text="${p.name}">Plan</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><th scope="row">Type</th><td th:each="p : ${plans}" th:text="${p.planType}">Prepaid</td></tr>
+            <tr><th scope="row">Price</th>
+                <td th:each="p : ${plans}" th:classappend="${p.price == lowestPrice} ? 'best'">
+                    <span th:text="${p.priceLabel}">₹199</span>
+                    <small th:if="${p.price == lowestPrice}">Lowest price</small>
+                </td></tr>
+            <tr><th scope="row">Validity</th><td th:each="p : ${plans}" th:text="${p.validityLabel}">28 days</td></tr>
+            <tr><th scope="row">Data</th><td th:each="p : ${plans}" th:text="${p.dataAllowance}">1.5 GB/day</td></tr>
+            <tr><th scope="row">Calls</th><td th:each="p : ${plans}" th:text="${p.calling}">Unlimited</td></tr>
+            <tr><th scope="row">SMS</th><td th:each="p : ${plans}" th:text="${p.sms}">100/day</td></tr>
+            <tr><th scope="row">Benefits</th><td th:each="p : ${plans}" th:text="${p.displayBenefits()}">None</td></tr>
+            <tr><th scope="row"></th>
+                <td th:each="p : ${plans}"><a class="btn" th:href="@{/recharge(planId=${p.planId})}">Recharge</a></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="more"><a th:href="@{/plans}">Back to all plans</a></p>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' | TeleConnect'">TeleConnect</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header class="site-header" th:fragment="header(active)">
+    <div class="wrap bar">
+        <a class="brand" th:href="@{/}">Tele<span>Connect</span></a>
+        <nav class="nav" aria-label="Main">
+            <a th:href="@{/}" th:classappend="${active == 'home'} ? 'active'">Home</a>
+            <a th:href="@{/plans}" th:classappend="${active == 'plans'} ? 'active'">Plans</a>
+            <a th:href="@{/recharge}" th:classappend="${active == 'recharge'} ? 'active'">Recharge</a>
+            <a th:href="@{/history}" th:classappend="${active == 'history'} ? 'active'">History</a>
+            <a th:href="@{/admin}" th:classappend="${active == 'admin'} ? 'active'">Admin</a>
+        </nav>
+    </div>
+</header>
+
+<article class="plan-card" th:fragment="planCard(plan, compare)"
+         th:classappend="${plan.planType == 'Postpaid'} ? 'postpaid'">
+    <div class="plan-top">
+        <span class="badge" th:text="${plan.planType}">Prepaid</span>
+        <span class="plan-id" th:text="${plan.planId}">P101</span>
+    </div>
+    <h3 th:text="${plan.name}">Plan name</h3>
+    <p class="price" th:text="${plan.priceLabel}">₹199 one-time</p>
+    <dl class="specs">
+        <div><dt>Validity</dt><dd th:text="${plan.validityLabel}">28 days</dd></div>
+        <div><dt>Data</dt><dd th:text="${plan.dataAllowance}">1.5 GB/day</dd></div>
+        <div><dt>Calls</dt><dd th:text="${plan.calling}">Unlimited</dd></div>
+        <div><dt>SMS</dt><dd th:text="${plan.sms}">100/day</dd></div>
+    </dl>
+    <p class="extras" th:text="${plan.displayBenefits()}">Includes TeleTV Basic</p>
+    <div class="card-actions">
+        <a class="btn" th:href="@{/recharge(planId=${plan.planId})}">Recharge</a>
+        <label class="compare-pick" th:if="${compare}">
+            <input type="checkbox" name="ids" th:value="${plan.planId}" form="compare-form"> Compare
+        </label>
+    </div>
+</article>
+
+<footer class="site-footer" th:fragment="footer">
+    <div class="wrap">
+        <p>TeleConnect is a college demo. Plans are fictional and payments are simulated, so no money moves and no real recharge happens.</p>
+        <p>Data is kept in memory and resets when the application restarts.</p>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+</footer>
+
+</body>
+</html>

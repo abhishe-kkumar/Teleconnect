@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Home')}"></head>
+<body>
+<header th:replace="~{fragments :: header('home')}"></header>
+
+<section class="hero">
+    <div class="wrap hero-grid">
+        <div>
+            <h1>Pick a plan.<br>Recharge in seconds.</h1>
+            <p class="lead">Compare prepaid and postpaid plans side by side, then recharge any mobile number and keep a record of every transaction.</p>
+            <div class="hero-actions">
+                <a class="btn btn-accent" th:href="@{/plans}">Explore plans</a>
+                <a class="btn btn-ghost" th:href="@{/recharge}">Recharge now</a>
+            </div>
+        </div>
+        <div class="signal" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+</section>
+
+<main class="wrap section">
+    <h2>Popular plans</h2>
+    <div class="cards">
+        <th:block th:each="plan : ${featured}">
+            <article th:replace="~{fragments :: planCard(${plan}, false)}"></article>
+        </th:block>
+    </div>
+    <p class="more"><a th:href="@{/plans}">See all plans and compare</a></p>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

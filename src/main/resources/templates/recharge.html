@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Recharge')}"></head>
+<body>
+<header th:replace="~{fragments :: header('recharge')}"></header>
+
+<main class="wrap section narrow">
+    <h1>Recharge a number</h1>
+    <p class="muted">Payment is simulated. Nothing is charged.</p>
+
+    <div class="alert error" th:if="${error}" th:text="${error}" role="alert">Error</div>
+
+    <form class="form" th:action="@{/recharge}" method="post">
+        <label for="mobile">Mobile number</label>
+        <input id="mobile" name="mobile" type="tel" inputmode="numeric" maxlength="10"
+               placeholder="10-digit number, e.g. 9876543210" th:value="${mobile}" required>
+
+        <label for="planId">Plan</label>
+        <select id="planId" name="planId" required>
+            <option value="">Select a plan</option>
+            <option th:each="p : ${plans}" th:value="${p.planId}"
+                    th:text="${p.name + ' (' + p.planType + ') - ' + p.priceLabel}"
+                    th:selected="${p.planId == selectedPlanId}">Plan</option>
+        </select>
+
+        <label class="check">
+            <input type="checkbox" name="simulateFailure" value="true" th:checked="${simulateFailure}">
+            Simulate a failed payment (for demo)
+        </label>
+
+        <button class="btn btn-accent" type="submit">Pay and recharge</button>
+    </form>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Recharge history')}"></head>
+<body>
+<header th:replace="~{fragments :: header('history')}"></header>
+
+<main class="wrap section">
+    <h1>Recharge history</h1>
+
+    <form class="inline-form" th:action="@{/history}" method="get">
+        <label for="mobile" class="sr">Mobile number</label>
+        <input id="mobile" name="mobile" type="tel" inputmode="numeric" maxlength="10"
+               placeholder="Filter by mobile number" th:value="${mobile}">
+        <button class="btn" type="submit">Show</button>
+        <a class="btn btn-ghost-dark" th:href="@{/history}" th:if="${!#strings.isEmpty(mobile)}">Show all</a>
+    </form>
+
+    <div class="alert error" th:if="${error}" th:text="${error}" role="alert">Error</div>
+
+    <div class="table-scroll" th:unless="${#lists.isEmpty(transactions)}">
+        <table class="data">
+            <thead>
+            <tr><th>Transaction ID</th><th>Mobile</th><th>Plan</th><th>Amount</th><th>Date and time</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="t : ${transactions}">
+                <td th:text="${t.transactionId}">TC0001</td>
+                <td th:text="${t.mobileNumber}">9876543210</td>
+                <td th:text="${t.planName + ' (' + t.planType + ')'}">Plan</td>
+                <td th:text="${t.amountLabel}">₹199</td>
+                <td th:text="${t.formattedTime}">Now</td>
+                <td><span class="status" th:text="${t.status}">SUCCESS</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="empty" th:if="${#lists.isEmpty(transactions) and error == null and !#strings.isEmpty(mobile)}">
+        No recharges found for this number.
+    </p>
+    <p class="empty" th:if="${#lists.isEmpty(transactions) and error == null and #strings.isEmpty(mobile)}">
+        No recharges yet. <a th:href="@{/recharge}">Make the first one.</a>
+    </p>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>
